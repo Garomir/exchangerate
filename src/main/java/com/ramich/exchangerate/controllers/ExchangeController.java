@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ExchangeController {
+    @Autowired
     private ExchangesService exchangesService;
 
-    @Autowired
+    /*@Autowired
     public void setExchangesService(ExchangesService exchangesService) {
         this.exchangesService = exchangesService;
-    }
+    }*/
 
     @GetMapping("/test")
     public void mapJson(){
