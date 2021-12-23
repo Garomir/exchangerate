@@ -9,21 +9,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ExchangeController {
-    @Autowired
     private ExchangesService exchangesService;
 
-    /*@Autowired
+    @Autowired
     public void setExchangesService(ExchangesService exchangesService) {
         this.exchangesService = exchangesService;
-    }*/
+    }
 
     @GetMapping("/test")
-    public void mapJson(){
+    public Exchange getRateWithUsdAndSymbol(){
+        Exchange ex = null;
         try {
-            Exchange ex = exchangesService.getExchangeBySymbol("AUD");
+            ex = exchangesService.getRateWithUsdAndSymbol("AUD");
             System.out.println(ex.getRates().path("AUD").asText());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        return ex;
     }
 }

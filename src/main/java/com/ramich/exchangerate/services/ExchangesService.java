@@ -4,5 +4,5 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ramich.exchangerate.entities.Exchange;
 
 public interface ExchangesService {
-    Exchange getExchangeBySymbol(String symbol) throws JsonProcessingException;
+    Exchange getRateWithUsdAndSymbol(String symbol) throws JsonProcessingException;
 }
