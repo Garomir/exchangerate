@@ -17,7 +17,7 @@ public class ExchangeController {
         this.exchangesService = exchangesService;
     }
 
-    @GetMapping("/rate/{symbol}")
+    @GetMapping("/rate/today/{symbol}")
     public Exchange getRateWithUsdAndSymbol(@PathVariable("symbol") String symbol){
         Exchange ex = null;
         try {
@@ -39,5 +39,29 @@ public class ExchangeController {
             e.printStackTrace();
         }
         return ex;
+    }
+
+    @GetMapping("/rate/{symbol}")
+    public String getGif(@PathVariable("symbol") String symbol){
+        Exchange yesterday = null;
+        Exchange today = null;
+        double yesterdayRate, todayRate;
+        try {
+            yesterday = exchangesService.getYesterdayRateWithUsdAndSymbol(symbol);
+            today = exchangesService.getRateWithUsdAndSymbol(symbol);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        assert yesterday != null;
+        yesterdayRate = yesterday.getRates().path(symbol).asDouble();
+        assert today != null;
+        todayRate = today.getRates().path(symbol).asDouble();
+
+        if (todayRate > yesterdayRate){
+            return "Rate is UP!!!";
+        } else {
+            return "Rate is DOWN!!!";
+        }
     }
 }

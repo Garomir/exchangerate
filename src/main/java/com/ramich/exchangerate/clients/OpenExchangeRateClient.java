@@ -1,7 +1,6 @@
 package com.ramich.exchangerate.clients;
 
 import com.ramich.exchangerate.entities.Exchange;
-import feign.Param;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

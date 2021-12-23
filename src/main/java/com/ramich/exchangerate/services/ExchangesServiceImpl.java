@@ -15,10 +15,10 @@ import java.util.Date;
 @Service
 public class ExchangesServiceImpl implements ExchangesService {
 
-    @Value("$(exchanges.url)")
+    @Value("${exchanges.url}")
     private String exchangesUrl;
 
-    @Value("$(exchanges.appId)")
+    @Value("${exchanges.appId}")
     private String exchangesAppId;
 
     @Autowired
@@ -26,13 +26,13 @@ public class ExchangesServiceImpl implements ExchangesService {
 
     @Override
     public Exchange getRateWithUsdAndSymbol(String symbol) throws JsonProcessingException {
-        return exchangeRateClient.getRateWithUsdAndSymbol("a8b6fa17824246bca592e9a5441852d7", symbol);
+        return exchangeRateClient.getRateWithUsdAndSymbol(exchangesAppId, symbol);
     }
 
     @Override
     public Exchange getYesterdayRateWithUsdAndSymbol(String symbol) throws JsonProcessingException {
         return exchangeRateClient
-                .getYesterdayRateWithUsdAndSymbol("a8b6fa17824246bca592e9a5441852d7", symbol, getYesterday());
+                .getYesterdayRateWithUsdAndSymbol(exchangesAppId, symbol, getYesterday());
     }
 
     private String getYesterday() {
