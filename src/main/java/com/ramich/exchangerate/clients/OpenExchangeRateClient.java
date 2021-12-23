@@ -12,4 +12,9 @@ public interface OpenExchangeRateClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/latest.json?app_id={appId}&symbols={symbol}")
     Exchange getRateWithUsdAndSymbol(@PathVariable("appId") String appId, @PathVariable("symbol") String symbol);
+
+    @RequestMapping(method = RequestMethod.GET, value = "/historical/{date}.json?app_id={appId}&symbols={symbol}")
+    Exchange getYesterdayRateWithUsdAndSymbol(@PathVariable("appId") String appId,
+                                              @PathVariable("symbol") String symbol,
+                                              @PathVariable("date") String date);
 }

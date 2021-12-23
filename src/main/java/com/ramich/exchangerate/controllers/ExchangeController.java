@@ -5,6 +5,7 @@ import com.ramich.exchangerate.entities.Exchange;
 import com.ramich.exchangerate.services.ExchangesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -16,12 +17,24 @@ public class ExchangeController {
         this.exchangesService = exchangesService;
     }
 
-    @GetMapping("/test")
-    public Exchange getRateWithUsdAndSymbol(){
+    @GetMapping("/rate/{symbol}")
+    public Exchange getRateWithUsdAndSymbol(@PathVariable("symbol") String symbol){
         Exchange ex = null;
         try {
-            ex = exchangesService.getRateWithUsdAndSymbol("AUD");
-            System.out.println(ex.getRates().path("AUD").asText());
+            ex = exchangesService.getRateWithUsdAndSymbol(symbol);
+            System.out.println(ex.getRates().path(symbol).asText());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return ex;
+    }
+
+    @GetMapping("/rate/yesterday/{symbol}")
+    public Exchange getYesterdayRateWithUsdAndSymbol(@PathVariable("symbol") String symbol){
+        Exchange ex = null;
+        try {
+            ex = exchangesService.getYesterdayRateWithUsdAndSymbol(symbol);
+            System.out.println(ex.getRates().path(symbol).asText());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
