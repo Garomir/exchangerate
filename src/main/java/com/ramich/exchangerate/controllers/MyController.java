@@ -3,18 +3,28 @@ package com.ramich.exchangerate.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ramich.exchangerate.entities.Exchange;
 import com.ramich.exchangerate.services.ExchangesService;
+import com.ramich.exchangerate.services.GiphyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ExchangeController {
+public class MyController {
+
     private ExchangesService exchangesService;
+    private GiphyService giphyService;
 
     @Autowired
     public void setExchangesService(ExchangesService exchangesService) {
         this.exchangesService = exchangesService;
+    }
+
+    @Autowired
+    public void setGiphyService(GiphyService giphyService) {
+        this.giphyService = giphyService;
     }
 
     @GetMapping("/rate/today/{symbol}")
@@ -42,7 +52,8 @@ public class ExchangeController {
     }
 
     @GetMapping("/rate/{symbol}")
-    public String getGif(@PathVariable("symbol") String symbol){
+    public Resource getGif(@PathVariable("symbol") String symbol){
+        Resource resource;
         Exchange yesterday = null;
         Exchange today = null;
         double yesterdayRate, todayRate;
@@ -59,9 +70,13 @@ public class ExchangeController {
         todayRate = today.getRates().path(symbol).asDouble();
 
         if (todayRate > yesterdayRate){
-            return "Rate is UP!!!";
+            resource = giphyService.getGif("rich");
+            //return "Rate is UP!!!";
         } else {
-            return "Rate is DOWN!!!";
+            resource = giphyService.getGif("broke");
+            //return "Rate is DOWN!!!";
         }
+
+        return resource;
     }
 }
