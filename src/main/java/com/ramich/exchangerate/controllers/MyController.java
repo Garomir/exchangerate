@@ -1,21 +1,39 @@
 package com.ramich.exchangerate.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.ramich.exchangerate.entities.Exchange;
 import com.ramich.exchangerate.services.ExchangesService;
 import com.ramich.exchangerate.services.GiphyService;
+import com.ramich.exchangerate.utils.MediaTypeUtils;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.Files;
 
 @RestController
 public class MyController {
 
     private ExchangesService exchangesService;
     private GiphyService giphyService;
+
+    @Autowired
+    private ServletContext servletContext;
 
     @Autowired
     public void setExchangesService(ExchangesService exchangesService) {
@@ -52,8 +70,9 @@ public class MyController {
     }
 
     @GetMapping("/rate/{symbol}")
-    public Resource getGif(@PathVariable("symbol") String symbol){
-        Resource resource;
+    public ResponseEntity<InputStreamResource> getGif(@PathVariable("symbol") String symbol) throws IOException {
+        InputStreamResource inputStreamResource;
+        String gifUrl;
         Exchange yesterday = null;
         Exchange today = null;
         double yesterdayRate, todayRate;
@@ -69,14 +88,41 @@ public class MyController {
         assert today != null;
         todayRate = today.getRates().path(symbol).asDouble();
 
+        File file = null;
+        MediaType mediaType = null;
         if (todayRate > yesterdayRate){
-            resource = giphyService.getGif("rich");
-            //return "Rate is UP!!!";
+            gifUrl = giphyService.getGif("rich");
+            file = new File("C:\\Proj\\fillle");
+            //file = File.createTempFile("data", null);
+            FileUtils.copyURLToFile(new URL(gifUrl), file);
+            mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, file.getName());
+
+            //InputStream in = new URL(gifUrl).openStream();
+            inputStreamResource = new InputStreamResource(new FileInputStream(file));
+            /*File file = new File(gifUrl);
+            inputStreamResource = new InputStreamResource(new FileInputStream(file));*/
         } else {
-            resource = giphyService.getGif("broke");
-            //return "Rate is DOWN!!!";
+            gifUrl = giphyService.getGif("broke");
+            file = new File("C:\\Proj\\fillle.gif");
+            //file = File.createTempFile("data", null);
+            FileUtils.copyURLToFile(new URL(gifUrl), file);
+            mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, file.getName());
+
+            //InputStream in = new URL(gifUrl).openStream();
+            inputStreamResource = new InputStreamResource(new FileInputStream(file));
+            /*File file = new File(gifUrl);
+            inputStreamResource = new InputStreamResource(new FileInputStream(file));*/
         }
 
-        return resource;
+        //return gifUrl;
+
+        return ResponseEntity.ok()
+                // Content-Disposition
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
+                // Content-Type
+                .contentType(MediaType.IMAGE_GIF)
+                // Contet-Length
+                .contentLength(file.length()) //
+                .body(inputStreamResource);
     }
 }
