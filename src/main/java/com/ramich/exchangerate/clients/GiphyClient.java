@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(name = "${giphy.name}", url="${giphy.url}")
 public interface GiphyClient {
     @RequestMapping(method = RequestMethod.GET, value = "?apiKey={apiKey}&tag={tag}")
-    String getGifByTag(@PathVariable("apiKey") String apiKey, @PathVariable("tag") String tag);
+    String getGifUrlByTag(@PathVariable("apiKey") String apiKey, @PathVariable("tag") String tag);
 }

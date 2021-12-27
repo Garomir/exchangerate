@@ -2,6 +2,8 @@ package com.ramich.exchangerate.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.util.Objects;
+
 public class Exchange {
     private String disclaimer;
     private String license;
@@ -58,5 +60,18 @@ public class Exchange {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Exchange exchange = (Exchange) o;
+        return Objects.equals(disclaimer, exchange.disclaimer) && Objects.equals(license, exchange.license) && Objects.equals(timestamp, exchange.timestamp) && Objects.equals(base, exchange.base) && Objects.equals(rates, exchange.rates);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(disclaimer, license, timestamp, base, rates);
     }
 }

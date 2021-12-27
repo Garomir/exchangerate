@@ -23,7 +23,11 @@ public class GiphyServiceImpl implements GiphyService{
 
     @Override
     public String getGif(String tag) {
-        String json = giphyClient.getGifByTag(giphyApiKey, tag);
+        String json = giphyClient.getGifUrlByTag(giphyApiKey, tag);
+        return getGifUrlFromJson(json);
+    }
+
+    public String getGifUrlFromJson(String json){
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = null;
         try {

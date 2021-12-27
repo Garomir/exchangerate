@@ -16,9 +16,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.0'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.6.2'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.8.2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
 	useJUnitPlatform()
+}
+
+tasks.withType(Test) {
+	useJUnitPlatform()
+	jvmArgs '--enable-preview'
 }
