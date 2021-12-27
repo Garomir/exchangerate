@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-
 @Service
 public class GiphyServiceImpl implements GiphyService{
 
@@ -34,15 +32,7 @@ public class GiphyServiceImpl implements GiphyService{
             e.printStackTrace();
         }
         assert jsonNode != null;
-        JsonNode url = jsonNode.at("/data/images/downsized_large/url");
-        return cutTheUrl(url.asText());
-    }
-
-    private String cutTheUrl(String url){
-        int start = 0;
-        int end = url.indexOf("?");
-        char[] dst = new char[end];
-        url.getChars(start, end, dst, 0);
-        return new String(dst);
+        JsonNode url = jsonNode.at("/data/images/original/url");
+        return url.asText();
     }
 }

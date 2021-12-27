@@ -47,7 +47,7 @@ public class StaticController {
         assert today != null;
         todayRate = today.getRates().path(symbol).asDouble();
 
-        if (todayRate > yesterdayRate){
+        if (todayRate >= yesterdayRate){
             gifUrl = giphyService.getGif("rich");
         } else {
             gifUrl = giphyService.getGif("broke");
