@@ -27,7 +27,7 @@ public class GiphyServiceImpl implements GiphyService{
         return getGifUrlFromJson(json);
     }
 
-    public String getGifUrlFromJson(String json){
+    private String getGifUrlFromJson(String json){
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = null;
         try {
