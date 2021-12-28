@@ -33,7 +33,7 @@ public class ExchangeTest {
     }
 
     @Test
-    public void notEqualsCats(){
+    public void notEqualsExchange(){
         assertNotEquals(exchange1, exchange3);
     }
 }
